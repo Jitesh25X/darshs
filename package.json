@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Darshs | Art Community & Journal",
   "scripts": {
+    "link": "vercel link",
     "dev": "vercel dev",
     "deploy": "vercel",
     "deploy:prod": "vercel --prod"
