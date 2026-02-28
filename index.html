@@ -1,20 +1,607 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="light" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <title>Document</title>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 7'%3E%3Crect x='0' y='0' width='5' height='1' fill='black'/%3E%3Crect x='0' y='1' width='1' height='1' fill='black'/%3E%3Crect x='4' y='1' width='2' height='1' fill='black'/%3E%3Crect x='0' y='2' width='2' height='4' fill='black'/%3E%3Crect x='5' y='2' width='1' height='5' fill='black'/%3E%3Crect x='0' y='6' width='6' height='1' fill='black'/%3E%3C/svg%3E"/>
+<title>Darshs | Art Community &amp; Journal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DotGothic16&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          primary: "#000000",
+          "background-light": "#FAFAFA",
+          "background-dark": "#0A0A0A",
+        },
+        fontFamily: {
+          display: ["Playfair Display", "serif"],
+          sans: ["Inter", "sans-serif"],
+          pixel: ["DotGothic16", "sans-serif"],
+        },
+        borderRadius: {
+          DEFAULT: "0px",
+          lg: "0px",
+          full: "0px",
+        },
+      },
+    },
+  };
+</script>
+<style type="text/tailwindcss">
+  @layer base {
+    button, .btn { @apply rounded-none; }
+  }
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, #e5e7eb 1px, transparent 1px),
+      linear-gradient(to bottom, #e5e7eb 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .dark .grid-bg {
+    background-image:
+      linear-gradient(to right, #1f2937 1px, transparent 1px),
+      linear-gradient(to bottom, #1f2937 1px, transparent 1px);
+  }
+  .pixel-logo {
+    display: grid;
+    grid-template-columns: repeat(7, 4px);
+    grid-template-rows: repeat(7, 4px);
+    gap: 0;
+  }
+  .pixel-logo .p { background: currentColor; }
+  .tilted-element { transform: rotate(-1.5deg); }
+  .tilted-element-alt { transform: rotate(1.2deg); }
+  .distortion-tag {
+    @apply absolute top-4 right-4 bg-black text-white dark:bg-white dark:text-black px-3 py-1 text-[8px] font-pixel uppercase tracking-widest z-20;
+  }
+  .scroll-reveal-indicator {
+    @apply flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400;
+  }
+  .overlapping-line {
+    position: absolute;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.15;
+    width: 120%;
+    left: -10%;
+  }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* ── Theme toggle animation ── */
+  .theme-icon { transition: transform 0.3s ease, opacity 0.3s ease; }
+  html.light  #icon-dark  { display: flex; }
+  html.light  #icon-light { display: none; }
+  html.dark   #icon-dark  { display: none; }
+  html.dark   #icon-light { display: flex; }
+</style>
 </head>
-<body>
-    <nav class="flex items-center justify-between p-4">
-        <div class="flex items-center space-x-4">
-            <a href="https://forms.gle/gxkXK1WpNWw8zBfe6" target="_blank" rel="noopener noreferrer" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Join Us</a>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300 overflow-x-hidden">
+
+<!-- Grid background -->
+<div class="fixed inset-0 grid-bg pointer-events-none z-0"></div>
+
+<!-- ═══════════════════════════════════════════
+     NAVBAR
+════════════════════════════════════════════ -->
+<nav class="sticky top-0 z-50 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-sm border-b border-black dark:border-white">
+  <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+
+    <!-- Left: Logo + Nav links -->
+    <div class="flex items-center gap-8">
+      <a class="flex items-center gap-3 group" href="javascript:void(0)">
+        <div class="pixel-logo text-black dark:text-white">
+          <div class="row-start-1 col-start-1 col-span-5 p"></div>
+          <div class="row-start-2 col-start-1 col-span-1 p"></div>
+          <div class="row-start-2 col-start-5 col-span-2 p"></div>
+          <div class="row-start-3 col-start-1 col-span-2 p"></div>
+          <div class="row-start-3 col-start-6 col-span-1 p"></div>
+          <div class="row-start-4 col-start-1 col-span-2 p"></div>
+          <div class="row-start-4 col-start-6 col-span-1 p"></div>
+          <div class="row-start-5 col-start-1 col-span-2 p"></div>
+          <div class="row-start-5 col-start-6 col-span-1 p"></div>
+          <div class="row-start-6 col-start-1 col-span-2 p"></div>
+          <div class="row-start-6 col-start-6 col-span-1 p"></div>
+          <div class="row-start-7 col-start-1 col-span-6 p"></div>
         </div>
-    </nav>
-    <header class="bg-gray-800 text-white p-6">
-        <h1 class="text-3xl">Join the Collective</h1>
-        <a href="https://forms.gle/gxkXK1WpNWw8zBfe6" target="_blank" rel="noopener noreferrer" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Join the Collective</a>
-    </header>
+        <span class="text-xl font-display font-bold tracking-tighter uppercase">darsh</span>
+      </a>
+
+      <div class="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-[0.2em]">
+        <a class="hover:underline underline-offset-8" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;">Home</a>
+        <a class="text-slate-400 dark:text-slate-500 hover:text-black dark:hover:text-white transition-colors" href="#gallery" onclick="document.getElementById('gallery').scrollIntoView({behavior:'smooth'}); return false;">Gallery</a>
+        <a class="text-slate-400 dark:text-slate-500 hover:text-black dark:hover:text-white transition-colors" href="#journal" onclick="document.getElementById('journal').scrollIntoView({behavior:'smooth'}); return false;">The Journal</a>
+        <a class="text-slate-400 dark:text-slate-500 hover:text-black dark:hover:text-white transition-colors" href="#community" onclick="document.getElementById('community').scrollIntoView({behavior:'smooth'}); return false;">Community</a>
+      </div>
+    </div>
+
+    <!-- Right: Theme toggle + Join Us -->
+    <div class="flex items-center gap-6">
+
+      <!-- 🌙 / ☀️ Theme Toggle -->
+      <button
+        onclick="toggleTheme()"
+        aria-label="Toggle dark mode"
+        class="flex items-center gap-2 px-3 py-2 border border-current text-xs font-bold uppercase tracking-widest transition-all hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
+      >
+        <!-- Light mode shows "Dark" option -->
+        <span id="icon-dark" class="items-center gap-2">
+          <span class="material-symbols-outlined text-base leading-none">dark_mode</span>
+          <span class="hidden sm:inline">Dark</span>
+        </span>
+        <!-- Dark mode shows "Light" option -->
+        <span id="icon-light" class="items-center gap-2">
+          <span class="material-symbols-outlined text-base leading-none">light_mode</span>
+          <span class="hidden sm:inline">Light</span>
+        </span>
+      </button>
+
+      <button
+        onclick="document.getElementById('join-modal').classList.remove('hidden')"
+        class="bg-black dark:bg-white text-white dark:text-black px-6 py-2.5 text-xs font-bold uppercase tracking-widest border border-transparent hover:bg-transparent hover:border-black dark:hover:border-white hover:text-black dark:hover:text-white transition-all"
+      >
+        Join Us
+      </button>
+
+      <!-- Mobile hamburger -->
+      <button
+        class="md:hidden"
+        onclick="document.getElementById('mobile-menu').classList.toggle('hidden')"
+        aria-label="Menu"
+      >
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-black dark:border-white bg-background-light dark:bg-background-dark px-6 py-4 flex flex-col gap-4 text-xs font-bold uppercase tracking-widest">
+    <a class="py-2 hover:underline" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'}); document.getElementById('mobile-menu').classList.add('hidden'); return false;">Home</a>
+    <a class="py-2 text-slate-400 hover:text-black dark:hover:text-white" href="#gallery" onclick="document.getElementById('gallery').scrollIntoView({behavior:'smooth'}); document.getElementById('mobile-menu').classList.add('hidden'); return false;">Gallery</a>
+    <a class="py-2 text-slate-400 hover:text-black dark:hover:text-white" href="#journal" onclick="document.getElementById('journal').scrollIntoView({behavior:'smooth'}); document.getElementById('mobile-menu').classList.add('hidden'); return false;">The Journal</a>
+    <a class="py-2 text-slate-400 hover:text-black dark:hover:text-white" href="#community" onclick="document.getElementById('community').scrollIntoView({behavior:'smooth'}); document.getElementById('mobile-menu').classList.add('hidden'); return false;">Community</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     MAIN
+════════════════════════════════════════════ -->
+<main class="relative z-10">
+
+  <!-- HERO -->
+  <section class="max-w-7xl mx-auto px-6 py-32 md:py-48 flex flex-col items-center text-center border-x border-slate-200 dark:border-slate-800 relative">
+    <div class="overlapping-line top-1/4 rotate-2 text-black dark:text-white"></div>
+    <div class="overlapping-line bottom-1/4 -rotate-1 text-black dark:text-white"></div>
+    <h1 class="text-6xl md:text-8xl font-display mb-8 max-w-5xl leading-tight relative">
+      Welcome to <span class="italic font-normal">Darshs</span><br/>Art Community
+    </h1>
+    <p class="text-lg md:text-xl text-slate-500 dark:text-slate-400 max-w-2xl mb-12 leading-relaxed font-light">
+      A grid-based aesthetic for digital visionaries. Curating the pulse of contemporary creation through a minimal pixel lens.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-6">
+      <button
+        onclick="document.getElementById('join-modal').classList.remove('hidden')"
+        class="bg-black dark:bg-white text-white dark:text-black px-12 py-5 text-sm font-bold uppercase tracking-[0.3em] hover:invert transition-all"
+      >
+        Join the Collective
+      </button>
+      <button
+        onclick="document.getElementById('gallery').scrollIntoView({behavior:'smooth'})"
+        class="border border-black dark:border-white px-12 py-5 text-sm font-bold uppercase tracking-[0.3em] hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all"
+      >
+        View Gallery
+      </button>
+    </div>
+    <div class="mt-20 scroll-reveal-indicator">
+      <span class="material-symbols-outlined text-sm">expand_more</span>
+      Scroll to discover
+    </div>
+  </section>
+
+  <!-- JOURNAL -->
+  <section id="journal" class="bg-black text-white dark:bg-white dark:text-black py-24 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row justify-between items-end mb-16">
+        <div class="tilted-element-alt">
+          <h2 class="text-5xl md:text-7xl font-display mb-4">The Journal</h2>
+          <p class="uppercase tracking-[0.4em] text-[10px] font-bold opacity-60">Thought pieces &amp; Darshs Creative Dialogue</p>
+        </div>
+        <div class="mt-8 md:mt-0 flex gap-4">
+          <div class="scroll-reveal-indicator text-white/50 dark:text-black/50">
+            <span class="material-symbols-outlined text-sm">unfold_more</span>
+            Horizontal exploration
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col md:flex-row gap-8 pb-12 overflow-x-auto no-scrollbar">
+        <!-- Article 1 -->
+        <article class="min-w-[320px] md:min-w-[450px] group border border-white/20 dark:border-black/20 p-6 flex flex-col tilted-element bg-zinc-900 dark:bg-slate-50 cursor-pointer">
+          <div class="relative aspect-[16/10] mb-8 overflow-hidden">
+            <span class="distortion-tag">Distortion FX</span>
+            <img alt="Abstract texture" class="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPmCZu6yFzwn0M8ZtW-xFdwZjgddlSEJhqm5X9dqG3VXQKB4r7xbAyNq9Tq2JfaaSavwmFdkXML9oOndYChC6qBW4HefZTJaW0wrQrHY6JQZy82AxMfdPUBqc9i_OO4HSnYx_2N2x2VMavJ-W8X6F_nkj1FGwC3CzHvcR1LbB-lkkAz1ItiPsWLctPWkQnxTm7e04xEjfkGCPHIGaeEnP4Xbam2O675i3MtS7EB6VSxjCyrRBGhNHsSVneT3m4__YnNEXbT40uZkov"/>
+            <div class="absolute inset-0 border border-white/10 m-2"></div>
+          </div>
+          <div class="flex-1">
+            <div class="flex justify-between items-center mb-4">
+              <span class="text-[10px] font-bold uppercase tracking-widest opacity-50">Volume 04 / No. 12</span>
+              <span class="material-symbols-outlined text-sm opacity-30">sensors</span>
+            </div>
+            <h3 class="text-2xl md:text-3xl font-display mb-4 group-hover:italic transition-all">The Architecture of Digital Void</h3>
+            <p class="text-sm text-slate-400 dark:text-slate-600 mb-8 leading-relaxed font-light">Exploring how negative space in pixel environments creates psychological resonance in modern viewers.</p>
+            <button onclick="return false;" class="inline-flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.3em] group-hover:gap-6 transition-all bg-transparent border-none cursor-pointer">
+              Read More
+              <span class="material-symbols-outlined text-lg">arrow_right_alt</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Article 2 -->
+        <article class="min-w-[320px] md:min-w-[450px] group border border-white/20 dark:border-black/20 p-6 flex flex-col bg-zinc-950 dark:bg-white cursor-pointer">
+          <div class="relative aspect-[16/10] mb-8 overflow-hidden">
+            <img alt="Abstract texture" class="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDWc40DqYfe24aPU1i7-IccyCgawJbliNWXDYwmWNGfQ6cw1Fz49HZzUaJFPcyKKY4i91-neNK7WZ9qg5se8a5Of2SOL2cDmwAkG9rjB9hl6pc8SE4sz7LjDLusk5Bb1Ubu2HClkrucyKbfNQR9JDiJT6XmrRF4Dd85llQo7yC8kT6oPNwD3fFrXFRvMzVLo5LP6RndQVRNFFC1h2sGCmhUvYR8rZFfG_zns4CoqJjklYCd-SlKv7AbIDPJO64m3AdUEPdv8bCecwc"/>
+            <div class="absolute inset-0 border border-white/10 m-2"></div>
+          </div>
+          <div class="flex-1">
+            <div class="flex justify-between items-center mb-4">
+              <span class="text-[10px] font-bold uppercase tracking-widest opacity-50">Volume 04 / No. 11</span>
+              <span class="material-symbols-outlined text-sm opacity-30">visibility</span>
+            </div>
+            <h3 class="text-2xl md:text-3xl font-display mb-4 group-hover:italic transition-all">Chromatic Distortion Theory</h3>
+            <p class="text-sm text-slate-400 dark:text-slate-600 mb-8 leading-relaxed font-light">A deep dive into why high-contrast palettes remain the definitive choice for minimalist art communities.</p>
+            <button onclick="return false;" class="inline-flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.3em] group-hover:gap-6 transition-all bg-transparent border-none cursor-pointer">
+              Read More
+              <span class="material-symbols-outlined text-lg">arrow_right_alt</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Article 3 -->
+        <article class="min-w-[320px] md:min-w-[450px] group border border-white/20 dark:border-black/20 p-6 flex flex-col tilted-element-alt bg-zinc-900 dark:bg-slate-50 cursor-pointer">
+          <div class="relative aspect-[16/10] mb-8 overflow-hidden">
+            <span class="distortion-tag">Distortion FX</span>
+            <img alt="Abstract texture" class="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2YeRQ5d0wxhwgh4fSzJ6EYURd4dmuZPOoh3OlEydZg0MpuIj5k1odBPK6eekez4UAiX9Qfzym8XRvec4jIoBIjydfJz53Vo0sefGXgpKwkq4k_vw1vZjglsVa7zcuaUCmGm3tcbcVV9YJq12789dm9MKLTiPMoDHSwFNXdlwRf-_8v7iaOF4hlXoUMvklWNSRAeqCRVLjTqU_qnBD6urnz817NMIPUY33AVn79UBj-X6Wn_OcMI8x1xND9JMpFYe0DyRpFgTmCGIe"/>
+            <div class="absolute inset-0 border border-white/10 m-2"></div>
+          </div>
+          <div class="flex-1">
+            <div class="flex justify-between items-center mb-4">
+              <span class="text-[10px] font-bold uppercase tracking-widest opacity-50">Volume 04 / No. 10</span>
+              <span class="material-symbols-outlined text-sm opacity-30">motion_sensor_active</span>
+            </div>
+            <h3 class="text-2xl md:text-3xl font-display mb-4 group-hover:italic transition-all">Kinetic Typography &amp; Motion</h3>
+            <p class="text-sm text-slate-400 dark:text-slate-600 mb-8 leading-relaxed font-light">Breaking the grid: how intentional misalignment and tilted layouts evoke a sense of living motion.</p>
+            <button onclick="return false;" class="inline-flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.3em] group-hover:gap-6 transition-all bg-transparent border-none cursor-pointer">
+              Read More
+              <span class="material-symbols-outlined text-lg">arrow_right_alt</span>
+            </button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery" class="border-y border-black dark:border-white bg-white dark:bg-black/40 relative">
+    <div class="max-w-7xl mx-auto px-6 py-24 border-x border-slate-200 dark:border-slate-800">
+      <div class="flex flex-col md:flex-row justify-between items-baseline mb-16 gap-4">
+        <div>
+          <h2 class="text-4xl font-display mb-4">Featured Paintings</h2>
+          <p class="text-slate-500 dark:text-slate-400 uppercase tracking-widest text-xs font-bold">Curated Darshs masterworks of the month</p>
+        </div>
+        <div class="flex items-center gap-6">
+          <div class="scroll-reveal-indicator">
+            <span class="material-symbols-outlined text-sm">show_chart</span>
+            Reveal on hover
+          </div>
+          <div class="flex gap-4">
+            <button class="p-3 border border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all">
+              <span class="material-symbols-outlined">grid_view</span>
+            </button>
+            <button class="p-3 border border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all">
+              <span class="material-symbols-outlined">sort</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <!-- Painting 1 -->
+        <div class="group border border-transparent hover:border-black dark:hover:border-white p-4 transition-all bg-white dark:bg-zinc-900 tilted-element">
+          <div class="aspect-square bg-slate-100 dark:bg-zinc-800 relative overflow-hidden mb-6">
+            <span class="distortion-tag opacity-0 group-hover:opacity-100 transition-opacity">Distortion FX</span>
+            <img alt="Celestial Echoes" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPmCZu6yFzwn0M8ZtW-xFdwZjgddlSEJhqm5X9dqG3VXQKB4r7xbAyNq9Tq2JfaaSavwmFdkXML9oOndYChC6qBW4HefZTJaW0wrQrHY6JQZy82AxMfdPUBqc9i_OO4HSnYx_2N2x2VMavJ-W8X6F_nkj1FGwC3CzHvcR1LbB-lkkAz1ItiPsWLctPWkQnxTm7e04xEjfkGCPHIGaeEnP4Xbam2O675i3MtS7EB6VSxjCyrRBGhNHsSVneT3m4__YnNEXbT40uZkov"/>
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/60 flex items-center justify-center transition-all">
+              <button class="opacity-0 group-hover:opacity-100 bg-white text-black px-8 py-3 text-xs font-bold uppercase tracking-widest transition-all translate-y-4 group-hover:translate-y-0">
+                View Details
+              </button>
+            </div>
+          </div>
+          <div class="flex justify-between items-end">
+            <div>
+              <h3 class="text-xl font-display mb-1">Celestial Echoes</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest">Alex Rivera</p>
+            </div>
+            <span class="material-symbols-outlined text-slate-300 dark:text-slate-700 hover:text-black dark:hover:text-white cursor-pointer transition-colors" onclick="this.textContent=this.textContent==='favorite'?'favorite_border':'favorite'">favorite_border</span>
+          </div>
+        </div>
+
+        <!-- Painting 2 -->
+        <div class="group border border-transparent hover:border-black dark:hover:border-white p-4 transition-all bg-white dark:bg-zinc-900">
+          <div class="aspect-square bg-slate-100 dark:bg-zinc-800 relative overflow-hidden mb-6">
+            <img alt="Botanical Chaos" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDWc40DqYfe24aPU1i7-IccyCgawJbliNWXDYwmWNGfQ6cw1Fz49HZzUaJFPcyKKY4i91-neNK7WZ9qg5se8a5Of2SOL2cDmwAkG9rjB9hl6pc8SE4sz7LjDLusk5Bb1Ubu2HClkrucyKbfNQR9JDiJT6XmrRF4Dd85llQo7yC8kT6oPNwD3fFrXFRvMzVLo5LP6RndQVRNFFC1h2sGCmhUvYR8rZFfG_zns4CoqJjklYCd-SlKv7AbIDPJO64m3AdUEPdv8bCecwc"/>
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/60 flex items-center justify-center transition-all">
+              <button class="opacity-0 group-hover:opacity-100 bg-white text-black px-8 py-3 text-xs font-bold uppercase tracking-widest transition-all translate-y-4 group-hover:translate-y-0">
+                View Details
+              </button>
+            </div>
+          </div>
+          <div class="flex justify-between items-end">
+            <div>
+              <h3 class="text-xl font-display mb-1">Botanical Chaos</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest">Elena Rossi</p>
+            </div>
+            <span class="material-symbols-outlined text-slate-300 dark:text-slate-700 hover:text-black dark:hover:text-white cursor-pointer transition-colors" onclick="this.textContent=this.textContent==='favorite'?'favorite_border':'favorite'">favorite_border</span>
+          </div>
+        </div>
+
+        <!-- Painting 3 -->
+        <div class="group border border-transparent hover:border-black dark:hover:border-white p-4 transition-all bg-white dark:bg-zinc-900 tilted-element-alt">
+          <div class="aspect-square bg-slate-100 dark:bg-zinc-800 relative overflow-hidden mb-6">
+            <span class="distortion-tag opacity-0 group-hover:opacity-100 transition-opacity">Distortion FX</span>
+            <img alt="Infinite Azure" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2YeRQ5d0wxhwgh4fSzJ6EYURd4dmuZPOoh3OlEydZg0MpuIj5k1odBPK6eekez4UAiX9Qfzym8XRvec4jIoBIjydfJz53Vo0sefGXgpKwkq4k_vw1vZjglsVa7zcuaUCmGm3tcbcVV9YJq12789dm9MKLTiPMoDHSwFNXdlwRf-_8v7iaOF4hlXoUMvklWNSRAeqCRVLjTqU_qnBD6urnz817NMIPUY33AVn79UBj-X6Wn_OcMI8x1xND9JMpFYe0DyRpFgTmCGIe"/>
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/60 flex items-center justify-center transition-all">
+              <button class="opacity-0 group-hover:opacity-100 bg-white text-black px-8 py-3 text-xs font-bold uppercase tracking-widest transition-all translate-y-4 group-hover:translate-y-0">
+                View Details
+              </button>
+            </div>
+          </div>
+          <div class="flex justify-between items-end">
+            <div>
+              <h3 class="text-xl font-display mb-1">Infinite Azure</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest">Julian Chen</p>
+            </div>
+            <span class="material-symbols-outlined text-slate-300 dark:text-slate-700 hover:text-black dark:hover:text-white cursor-pointer transition-colors" onclick="this.textContent=this.textContent==='favorite'?'favorite_border':'favorite'">favorite_border</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED ARTISTS -->
+  <section class="max-w-7xl mx-auto px-6 py-24 border-x border-slate-200 dark:border-slate-800">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-16 border-b border-slate-100 dark:border-slate-900 pb-12">
+      <h2 class="text-4xl font-display">Featured Artists</h2>
+      <div class="flex items-center gap-8">
+        <div class="scroll-reveal-indicator">
+          <span class="material-symbols-outlined text-sm">filter_center_focus</span>
+          Focus transition
+        </div>
+        <button onclick="return false;" class="group flex items-center gap-3 font-bold uppercase tracking-widest text-xs bg-transparent border-none cursor-pointer">
+          Discover more
+          <span class="material-symbols-outlined text-lg group-hover:translate-x-2 transition-transform">arrow_right_alt</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+      <!-- Artist 1 -->
+      <div class="flex flex-col items-center text-center group tilted-element">
+        <div class="w-40 h-40 bg-slate-100 dark:bg-zinc-800 mb-8 border border-transparent group-hover:border-black dark:group-hover:border-white transition-all p-2">
+          <img alt="Amelia Grey" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfbtrYj0Kpwzd5EKszIWJ23wDJMU8OXXQVNZZtHkbessv-xlfcAlJMuYCXwlqtCcqKQdGbRKFYdQh4oZfM0-jwFYQPC--G_q4xmVA0SFVzrYXRcmSIokpczBqYSu0ELbcdGyI6JG5JlTYdCSawFXAf9-vnuMXdReVzTXzRu-BWHcXzkklLHutaIHJdw4HQh76i8Z_Vskx_AwrPavhTrhsPenVourAPZQaun6v9URBkGw0ACDLxlxSosWZVo4WafmUT47s9FyElB8J8"/>
+        </div>
+        <h3 class="font-display text-2xl mb-1">Amelia Grey</h3>
+        <p class="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-[0.3em] font-bold mb-6">Sculptural Ceramics</p>
+        <div class="flex gap-6">
+          <button onclick="return false;" class="text-slate-400 hover:text-black dark:hover:text-white bg-transparent border-none cursor-pointer"><span class="material-symbols-outlined text-xl">camera</span></button>
+          <button onclick="return false;" class="text-slate-400 hover:text-black dark:hover:text-white bg-transparent border-none cursor-pointer"><span class="material-symbols-outlined text-xl">language</span></button>
+        </div>
+      </div>
+
+      <!-- Artist 2 -->
+      <div class="flex flex-col items-center text-center group">
+        <div class="w-40 h-40 bg-slate-100 dark:bg-zinc-800 mb-8 border border-transparent group-hover:border-black dark:group-hover:border-white transition-all p-2">
+          <img alt="David Oh" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCR2r2euCMHcEDi3_5a-o9vfUvUudpsgrWYgk0mz2F3wXITDTWp47CTEaEI4Z7iGlSG_43eghIZEAr3kgCnpA6guE7VxfSN1Vyolosr39pzZHeyBXhKyBBIRm8pHrvrfigiPviMrod2FLaob4W6xe5ts6E56ZkUI611D6fn0EnD5GCfDRqH45U5Isf7NICc0L_YM6i4As1xCQf-XmhWgZCJ0Vp9FxFg4cSI37-6EjbU4CoGUs3_WDhHlkYDhgW3rnQ1so5QnlX6lzBc"/>
+        </div>
+        <h3 class="font-display text-2xl mb-1">David Oh</h3>
+        <p class="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-[0.3em] font-bold mb-6">Digital Impressionism</p>
+        <div class="flex gap-6">
+          <button onclick="return false;" class="text-slate-400 hover:text-black dark:hover:text-white bg-transparent border-none cursor-pointer"><span class="material-symbols-outlined text-xl">camera</span></button>
+          <button onclick="return false;" class="text-slate-400 hover:text-black dark:hover:text-white bg-transparent border-none cursor-pointer"><span class="material-symbols-outlined text-xl">language</span></button>
+        </div>
+      </div>
+
+      <!-- Artist 3 -->
+      <div class="flex flex-col items-center text-center group tilted-element-alt">
+        <div class="w-40 h-40 bg-slate-100 dark:bg-zinc-800 mb-8 border border-transparent group-hover:border-black dark:group-hover:border-white transition-all p-2">
+          <img alt="Sara Bloom" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcHs_SU2Am0UIF7UFFeSXPx577tBqukI1s3ZH-xpLzTz1WLF2ZBdsaK2HP0CBtJ3Erk_dDYZZLsp_PbpgcDZ90qsJA0ue1rIwedp7OI9d3llr5Ua4Vl_PQZ5wOgdd_nvGsFXIAL-HW_-W3xpMOB1OvGiak_ETzLybL59rFnmT4zMU572BRrbFBmb41CnwUV7P8G9HeudOhCNv5foBYpLO3VQ45wEq7FFi6Ml345JUwa8Fme9kyDwfIav2Djty5cpPAWGakCgwG8Me0"/>
+        </div>
+        <h3 class="font-display text-2xl mb-1">Sara Bloom</h3>
+        <p class="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-[0.3em] font-bold mb-6">Mixed Media</p>
+        <div class="flex gap-6">
+          <button onclick="return false;" class="text-slate-400 hover:text-black dark:hover:text-white bg-transparent border-none cursor-pointer"><span class="material-symbols-outlined text-xl">camera</span></button>
+          <button onclick="return false;" class="text-slate-400 hover:text-black dark:hover:text-white bg-transparent border-none cursor-pointer"><span class="material-symbols-outlined text-xl">language</span></button>
+        </div>
+      </div>
+
+      <!-- Artist 4 -->
+      <div class="flex flex-col items-center text-center group">
+        <div class="w-40 h-40 bg-slate-100 dark:bg-zinc-800 mb-8 border border-transparent group-hover:border-black dark:group-hover:border-white transition-all p-2">
+          <img alt="Thomas Hale" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxiPwyCOmBFYUK_BXh9L2MCc0L2SVbkU-PIBk-CJgjhD8bJomkd0Gvl53k9zwpO4OUkF5aH4QFNzepcKq_FdlfWJEyUao7pIgFr4C0r-PwlCOkMVX2KIZZ6zOhjy2yszn33FjfRMovgmfonrxQipdjBqjoZRP7LPsiWyGMqd7pL-2r1kYbEWSZs4zk2lcuizHEzPTrB5LkNF1T-Vn-TmRQaYR3rltKkOQ19fMmScSFFeA15sCm2YY5mEiekPPP499U1wtEC4Vox5xi"/>
+        </div>
+        <h3 class="font-display text-2xl mb-1">Thomas Hale</h3>
+        <p class="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-[0.3em] font-bold mb-6">Fine Art Photography</p>
+        <div class="flex gap-6">
+          <button onclick="return false;" class="text-slate-400 hover:text-black dark:hover:text-white bg-transparent border-none cursor-pointer"><span class="material-symbols-outlined text-xl">camera</span></button>
+          <button onclick="return false;" class="text-slate-400 hover:text-black dark:hover:text-white bg-transparent border-none cursor-pointer"><span class="material-symbols-outlined text-xl">language</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section id="community" class="max-w-7xl mx-auto px-6 py-24 border-x border-slate-200 dark:border-slate-800">
+    <div class="bg-black text-white p-12 md:p-24 relative overflow-hidden border border-white/10">
+      <div class="absolute inset-0 opacity-10 pointer-events-none grid-bg"></div>
+      <div class="relative z-10 flex flex-col items-center text-center">
+        <h2 class="text-4xl md:text-6xl font-display mb-8">Elevate Your Vision</h2>
+        <p class="text-slate-400 max-w-xl mb-12 uppercase tracking-widest text-xs font-bold leading-loose">
+          Receive exclusive invites to exhibition previews, artist talks, and limited edition drops directly in your inbox.
+        </p>
+        <form class="w-full max-w-lg flex flex-col sm:flex-row gap-0 border border-white/20" onsubmit="handleSubscribe(event)">
+          <input id="newsletter-email" class="flex-1 bg-white/5 border-none text-white placeholder:text-white/30 focus:ring-0 px-8 py-5 text-sm" placeholder="Email Address" type="email"/>
+          <button type="submit" class="bg-white text-black px-12 py-5 text-xs font-bold uppercase tracking-[0.3em] hover:bg-slate-200 transition-colors">
+            Subscribe
+          </button>
+        </form>
+        <p id="subscribe-msg" class="hidden mt-4 text-white/60 text-xs tracking-widest uppercase">✓ You're on the list!</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════ -->
+<footer class="bg-background-light dark:bg-background-dark border-t border-black dark:border-white py-24 relative z-10">
+  <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-16">
+
+    <!-- Brand col -->
+    <div class="col-span-1 md:col-span-2">
+      <div class="flex items-center gap-3 mb-8">
+        <div class="pixel-logo text-black dark:text-white scale-75 origin-left">
+          <div class="row-start-1 col-start-1 col-span-5 p"></div>
+          <div class="row-start-2 col-start-1 col-span-1 p"></div>
+          <div class="row-start-2 col-start-5 col-span-2 p"></div>
+          <div class="row-start-3 col-start-1 col-span-2 p"></div>
+          <div class="row-start-3 col-start-6 col-span-1 p"></div>
+          <div class="row-start-4 col-start-1 col-span-2 p"></div>
+          <div class="row-start-4 col-start-6 col-span-1 p"></div>
+          <div class="row-start-5 col-start-1 col-span-2 p"></div>
+          <div class="row-start-5 col-start-6 col-span-1 p"></div>
+          <div class="row-start-6 col-start-1 col-span-2 p"></div>
+          <div class="row-start-6 col-start-6 col-span-1 p"></div>
+          <div class="row-start-7 col-start-1 col-span-6 p"></div>
+        </div>
+        <span class="text-3xl font-display font-bold tracking-tighter uppercase">darsh</span>
+      </div>
+      <p class="text-slate-500 dark:text-slate-400 max-w-md mb-10 leading-relaxed font-light">
+        Elevating the creative voice of contemporary artists worldwide. A space for connection, curation, and inspiration defined by minimal precision.
+      </p>
+      <div class="flex gap-8">
+        <button onclick="return false;" class="text-slate-400 hover:text-black dark:hover:text-white transition-colors bg-transparent border-none cursor-pointer"><span class="material-symbols-outlined">share</span></button>
+        <button onclick="return false;" class="text-slate-400 hover:text-black dark:hover:text-white transition-colors bg-transparent border-none cursor-pointer"><span class="material-symbols-outlined">alternate_email</span></button>
+        <button onclick="return false;" class="text-slate-400 hover:text-black dark:hover:text-white transition-colors bg-transparent border-none cursor-pointer"><span class="material-symbols-outlined">camera</span></button>
+      </div>
+    </div>
+
+    <!-- Explore -->
+    <div>
+      <h4 class="font-bold uppercase tracking-[0.3em] text-[10px] mb-10 border-b border-slate-100 dark:border-zinc-900 pb-4">Explore</h4>
+      <ul class="space-y-6 text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest">
+        <li><button onclick="return false;" class="hover:text-black dark:hover:text-white transition-colors bg-transparent border-none cursor-pointer">All Collections</button></li>
+        <li><button onclick="return false;" class="hover:text-black dark:hover:text-white transition-colors bg-transparent border-none cursor-pointer">Featured Artists</button></li>
+        <li><button onclick="return false;" class="hover:text-black dark:hover:text-white transition-colors bg-transparent border-none cursor-pointer">Membership Perks</button></li>
+        <li><button onclick="return false;" class="hover:text-black dark:hover:text-white transition-colors bg-transparent border-none cursor-pointer">The Journal</button></li>
+      </ul>
+    </div>
+
+    <!-- Information -->
+    <div>
+      <h4 class="font-bold uppercase tracking-[0.3em] text-[10px] mb-10 border-b border-slate-100 dark:border-zinc-900 pb-4">Information</h4>
+      <ul class="space-y-6 text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest">
+        <li><button onclick="return false;" class="hover:text-black dark:hover:text-white transition-colors bg-transparent border-none cursor-pointer">About Collective</button></li>
+        <li><button onclick="return false;" class="hover:text-black dark:hover:text-white transition-colors bg-transparent border-none cursor-pointer">Artist Submission</button></li>
+        <li><button onclick="return false;" class="hover:text-black dark:hover:text-white transition-colors bg-transparent border-none cursor-pointer">Privacy Policy</button></li>
+        <li><button onclick="return false;" class="hover:text-black dark:hover:text-white transition-colors bg-transparent border-none cursor-pointer">Contact</button></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 mt-24 pt-12 border-t border-slate-100 dark:border-slate-900 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-[0.4em] text-slate-400 gap-4">
+    <p>© 2026 Darshs Art Community. All rights reserved.</p>
+    <p class="font-pixel">Crafted for creators.</p>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════
+     JOIN MODAL
+════════════════════════════════════════════ -->
+<div id="join-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6">
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="document.getElementById('join-modal').classList.add('hidden')"></div>
+  <div class="relative bg-background-light dark:bg-background-dark border border-black dark:border-white w-full max-w-md p-10 z-10">
+    <button class="absolute top-4 right-4 material-symbols-outlined text-slate-400 hover:text-black dark:hover:text-white" onclick="document.getElementById('join-modal').classList.add('hidden')">close</button>
+    <h2 class="text-3xl font-display mb-2">Join the Collective</h2>
+    <p class="text-slate-500 text-xs uppercase tracking-widest mb-8">Darshs Art Community</p>
+    <form onsubmit="handleJoin(event)" class="flex flex-col gap-4">
+      <input type="text" placeholder="Your Name" class="w-full border border-black dark:border-white bg-transparent px-5 py-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white" required/>
+      <input type="email" placeholder="Email Address" class="w-full border border-black dark:border-white bg-transparent px-5 py-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white" required/>
+      <select class="w-full border border-black dark:border-white bg-background-light dark:bg-background-dark px-5 py-3 text-sm text-slate-500 focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white">
+        <option value="">Your Discipline</option>
+        <option>Painting</option>
+        <option>Photography</option>
+        <option>Digital Art</option>
+        <option>Sculpture</option>
+        <option>Mixed Media</option>
+        <option>Other</option>
+      </select>
+      <button type="submit" class="mt-2 bg-black dark:bg-white text-white dark:text-black px-8 py-4 text-xs font-bold uppercase tracking-[0.3em] hover:invert transition-all">
+        Apply Now
+      </button>
+    </form>
+    <p id="join-msg" class="hidden mt-4 text-center text-xs text-slate-500 uppercase tracking-widest">✓ Application received! We'll be in touch.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════════ -->
+<script>
+  // Theme toggle — persists in localStorage
+  function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.classList.toggle("dark");
+    html.classList.toggle("light", !isDark);
+    localStorage.setItem("darshs-theme", isDark ? "dark" : "light");
+  }
+
+  // Apply saved theme on load
+  (function() {
+    const saved = localStorage.getItem("darshs-theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (saved === "dark" || (!saved && prefersDark)) {
+      document.documentElement.classList.add("dark");
+      document.documentElement.classList.remove("light");
+    }
+  })();
+
+  // Newsletter form
+  function handleSubscribe(e) {
+    e.preventDefault();
+    document.getElementById("newsletter-email").value = "";
+    const msg = document.getElementById("subscribe-msg");
+    msg.classList.remove("hidden");
+    setTimeout(() => msg.classList.add("hidden"), 4000);
+  }
+
+  // Join modal form
+  function handleJoin(e) {
+    e.preventDefault();
+    const msg = document.getElementById("join-msg");
+    msg.classList.remove("hidden");
+    e.target.reset();
+    setTimeout(() => {
+      document.getElementById("join-modal").classList.add("hidden");
+      msg.classList.add("hidden");
+    }, 2500);
+  }
+</script>
 </body>
 </html>
